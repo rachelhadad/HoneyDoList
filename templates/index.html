@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<!--
+	Astral by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Astral by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+		<noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper-->
+			<div id="wrapper">
+
+				<!-- Nav -->
+					<nav id="nav">
+						<a href="#" class="icon solid fas fa-th-list"><span>Home</span></a>
+						<a href="#add" class="icon solid fas fa-plus-circle"><span>Add</span></a>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Me -->
+						{% block content %}
+							<article id="home" class="panel intro">
+								<header>
+									<h1>Honey Do List</h1>
+									<hr>
+									<div id="tasklist">
+										{% for todo in todos %}
+										<form action="{{ url_for('click_complete', id=todo.id) }}" method="POST">
+											<div class="col-12 col-12-medium col-12-small">
+												<ul>
+													<div class="col-4 taskname"><li>{{ todo.name }}</div> 
+													<div class="col-4 duedate">{{ todo.due_date.strftime('%b %d, %Y') }}</li></div>
+													<div id="complete_button">
+													{% if todo.pending_completion == True %}
+													<input type="submit" value="Pending Approval" class="pending_submit">
+													{% else %}
+													<input type="submit" value="Mark Complete">
+													{% endif %}
+													</div>
+												</ul>
+											</div>
+										</form>
+										{% endfor %}
+									</div>
+								</header>
+									<img src="{{ url_for('static', filename='images/beehive.png') }}" alt="Busy bees" />
+								</a>
+							</article>
+						{% endblock %}
+
+						<!-- Add Task -->
+							<article id="add" class="panel">
+								<header>
+									<h2>Add Task</h2>
+									<hr>
+								</header>
+								<form action="{{ url_for('add_task') }}" method="POST">
+									<div>
+										<div class="row">
+											<div class="col-6 col-12-medium">Task:</div>
+											<div class="col-6 col-12-medium">Due Date:</div>
+										</div>
+										<div class="row">
+											<div class="col-6 col-12-medium">
+												<input type="text" name="task" placeholder="Enter task name" />
+											</div>
+											<div class="col-6 col-12-medium">
+												<input type="date" name="date" />
+											</div>
+											<div class="col-12">
+												<input type="submit" id="add_button" value="Add" />
+											</div>
+										</div>
+									</div>
+								</form>
+							</article>
+
+					</div>
+
+				<!-- Footer -->
+					<div id="footer">
+						<ul class="copyright">
+							<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="static/js/jquery.min.js"></script>
+			<script src="static/js/browser.min.js"></script>
+			<script src="static/js/breakpoints.min.js"></script>
+			<script src="static/js/util.js"></script>
+			<script src="static/js/main.js"></script>
+
+	</body>
+</html>
