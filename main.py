@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import datetime
-from sqlalchemy import Column, String, Boolean, Date
-from send_text import send_reminder, request_approval
+from datetime import datetime
 import os
+from send_text import send_newtask, request_approval
+from send_reminder import send_reminder
+
+current_time = datetime.now()
+runreport_time = current_time.replace(hour=12, minute=15, second=0)
 
 app = Flask(__name__)
 # Setup db
@@ -34,10 +37,11 @@ def home():
 @app.route('/add', methods=["POST"])
 def add_task():
     get_due_date = request.form["date"]
-    due_date = datetime.datetime.strptime(get_due_date, "%Y-%m-%d")
+    due_date = datetime.strptime(get_due_date, "%Y-%m-%d")
     todo = Todo(name=request.form["task"].capitalize(), due_date=due_date, pending_completion=False, complete=False)
     db.session.add(todo)
     db.session.commit()
+    send_newtask(todo.name)
     return redirect(url_for('home'))
 
 @app.route('/mark_complete', methods=["POST", "GET"])
@@ -52,7 +56,8 @@ def click_complete():
 
 all_todos = Todo.query.all()
 todos_string='\n'.join([todo.name for todo in all_todos])
-send_reminder(todos_string)
+if current_time == runreport_time:
+    send_reminder(todos_string)
 
 if __name__ == '__main__':
     app.run(debug=True)

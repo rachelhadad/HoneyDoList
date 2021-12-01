@@ -8,10 +8,10 @@ server = smtplib.SMTP("smtp.gmail.com", 587)
 server.starttls()
 server.login(gmail_address, gmail_password)
 
-def send_reminder(list_of_todos):
+def send_newtask(todo_task):
     to_number = os.environ.get("seabass_phone")
-    body = list_of_todos
-    text_msg = ("From: %s\r\n" % gmail_address + "To: %s\r\n" % to_number + "Subject: %s\r\n" % 'You need to:' + "\r\n" + body)
+    body = todo_task
+    text_msg = ("From: %s\r\n" % gmail_address + "To: %s\r\n" % to_number + "Subject: %s\r\n" % 'New task added to your to do list:' + "\r\n" + body)
     server.sendmail(gmail_address, to_number, text_msg)
 
 def request_approval(todo_name):
