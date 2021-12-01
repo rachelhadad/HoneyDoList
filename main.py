@@ -5,9 +5,6 @@ import os
 from send_text import send_newtask, request_approval
 from send_reminder import send_reminder
 
-current_time = datetime.now()
-runreport_time = current_time.replace(hour=12, minute=15, second=0)
-
 app = Flask(__name__)
 # Setup db
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("sqlite_todo_db")
@@ -52,12 +49,6 @@ def click_complete():
     db.session.commit()
     request_approval(todo.name)
     return redirect(url_for('home'))
-
-
-all_todos = Todo.query.all()
-todos_string='\n'.join([todo.name for todo in all_todos])
-if current_time == runreport_time:
-    send_reminder(todos_string)
 
 if __name__ == '__main__':
     app.run(debug=True)
