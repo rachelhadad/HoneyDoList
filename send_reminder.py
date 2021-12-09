@@ -9,6 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("sqlite_todo_db")
 # Silence the deprecation warning in the console.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+phone_numbers = [os.getenv("seabass_phone"), os.getenv("my_phone")]
 
 
 # CREATE TABLE
@@ -30,9 +31,10 @@ all_todos = Todo.query.all()
 todos_string='\n'.join([todo.name for todo in all_todos])
 
 def send_reminder(list_of_todos):
-    to_number = os.environ.get("seabass_phone")
-    body = list_of_todos
-    text_msg = ("From: %s\r\n" % gmail_address + "To: %s\r\n" % to_number + "Subject: %s\r\n" % 'You need to:' + "\r\n" + body)
-    server.sendmail(gmail_address, to_number, text_msg)
+    for phone_number in phone_numbers:
+        to_number = phone_number
+        body = list_of_todos
+        text_msg = ("From: %s\r\n" % gmail_address + "To: %s\r\n" % to_number + "Subject: %s\r\n" % 'Please remember to:' + "\r\n\n" + body)
+        server.sendmail(gmail_address, to_number, text_msg)
 
 send_reminder(todos_string)

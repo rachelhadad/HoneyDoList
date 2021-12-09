@@ -5,7 +5,7 @@ from main import db, Todo
 
 con = sqlite3.connect('todolist.db')
 cur = con.cursor()
-cur.execute("DELETE FROM todo WHERE name = 'Move couch'")
+cur.execute("DELETE FROM todo WHERE id= 7")
 db.session.commit()
 
 tables = cur.execute("SELECT * FROM todo")

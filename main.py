@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from send_text import send_newtask, request_approval
-from send_reminder import send_reminder
 
 app = Flask(__name__)
 # Setup db
